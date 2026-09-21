@@ -9,7 +9,7 @@
     "aggregate_id",
     "occurred_at",
     "version",
-    "summary"
+    "payload"
   ],
   "properties": {
     "event_id": {
@@ -19,20 +19,55 @@
     "event_type": {
       "type": "string",
       "enum": [
-        "ENTRY_ACCEPTED",
-        "RECUSAL_DECLARED",
+        "RULES_FROZEN",
+        "EDITION_OPENED",
+        "ENTRY_REGISTERED",
+        "ELIGIBILITY_VERIFIED",
+        "GROUP_ASSIGNED",
+        "DRAW_HELD",
+        "MANUSCRIPT_SUBMITTED",
+        "MANUSCRIPT_SWAPPED_ON_SITE",
+        "RELATION_FLAGGED",
+        "RELATION_DECLARED",
+        "RELATION_CONFIRMED",
+        "JUDGE_ASSIGNED",
+        "JUDGE_RECUSED",
+        "REPLACEMENT_ACTIVATED",
         "SCORE_SUBMITTED",
+        "SCORE_CORRECTED",
+        "ATTENDANCE_MARKED",
+        "TIMING_RECORDED",
+        "INCIDENT_REPORTED",
         "INCIDENT_CONFIRMED",
-        "DECISION_FINALIZED"
+        "PERFORMANCE_RESUMED",
+        "RESULT_FINALIZED",
+        "TIE_DECLARED",
+        "TIE_RERUN_HELD",
+        "ADVANCEMENT_PUBLISHED",
+        "EVIDENCE_LOCKED",
+        "APPEAL_FILED",
+        "APPEAL_REVIEWED",
+        "TRAINING_FEEDBACK_RECORDED",
+        "FINAL_DECISION_PUBLISHED"
       ]
     },
     "aggregate_type": {
       "type": "string",
       "enum": [
+        "edition",
         "candidate_entry",
+        "manuscript",
+        "judging_session",
+        "relationship_declaration",
         "judging_assignment",
         "score_sheet",
-        "appeal_case"
+        "on_site_record",
+        "technical_incident",
+        "round_result",
+        "evidence_lock",
+        "appeal_case",
+        "training_record",
+        "final_decision"
       ]
     },
     "aggregate_id": {
@@ -47,10 +82,1408 @@
       "type": "integer",
       "minimum": 1
     },
+    "causation_id": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "actor": {
+      "type": "object"
+    },
+    "payload": {
+      "type": "object"
+    },
     "summary": {
       "type": "string",
       "minLength": 1
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "RULES_FROZEN"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "edition"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "rule_set_version",
+              "rules"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "EDITION_OPENED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "edition"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "edition_no",
+              "rule_set_version"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "ENTRY_REGISTERED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "candidate_entry"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "candidate_id",
+              "name",
+              "recommender",
+              "recommendation_no",
+              "eligibility"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "ELIGIBILITY_VERIFIED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "candidate_entry"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "candidate_id",
+              "verified_by",
+              "result",
+              "checked_items"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "GROUP_ASSIGNED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "candidate_entry"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "candidate_id",
+              "group_id",
+              "rule_set_version"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "DRAW_HELD"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "judging_session"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "session_id",
+              "group_id",
+              "round",
+              "draw_witness",
+              "draw_order"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "MANUSCRIPT_SUBMITTED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "manuscript"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "manuscript_id",
+              "candidate_id",
+              "round",
+              "submitted_at",
+              "attachments"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "MANUSCRIPT_SWAPPED_ON_SITE"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "manuscript"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "manuscript_id",
+              "candidate_id",
+              "round",
+              "previous_version",
+              "new_version",
+              "reason",
+              "recorded_by"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "RELATION_FLAGGED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "relationship_declaration"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "declaration_id",
+              "candidate_id",
+              "judge_id",
+              "relation_type",
+              "source",
+              "status"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "RELATION_DECLARED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "relationship_declaration"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "declaration_id",
+              "candidate_id",
+              "judge_id",
+              "relation_type",
+              "declared_by",
+              "detail"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "RELATION_CONFIRMED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "relationship_declaration"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "declaration_id",
+              "confirmed_by",
+              "decision",
+              "basis"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "JUDGE_ASSIGNED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "judging_assignment"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "assignment_id",
+              "judge_id",
+              "session_id",
+              "role"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "JUDGE_RECUSED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "judging_assignment"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "assignment_id",
+              "judge_id",
+              "session_id",
+              "reason"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "REPLACEMENT_ACTIVATED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "judging_assignment"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "assignment_id",
+              "replacement_judge_id",
+              "session_id",
+              "replaced_judge_id",
+              "peer_visible"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "SCORE_SUBMITTED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "score_sheet"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "sheet_id",
+              "judge_id",
+              "candidate_id",
+              "session_id",
+              "round",
+              "manuscript_version",
+              "dimension_scores",
+              "total"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "SCORE_CORRECTED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "score_sheet"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "sheet_id",
+              "previous_event_id",
+              "judge_id",
+              "candidate_id",
+              "round",
+              "dimension_scores",
+              "total",
+              "reason"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "ATTENDANCE_MARKED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "on_site_record"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "record_id",
+              "candidate_id",
+              "session_id",
+              "status",
+              "marked_by"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "TIMING_RECORDED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "on_site_record"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "record_id",
+              "candidate_id",
+              "session_id",
+              "planned_seconds",
+              "used_seconds",
+              "compensated_seconds"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "INCIDENT_REPORTED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "technical_incident"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "incident_id",
+              "session_id",
+              "reported_by",
+              "device",
+              "description",
+              "occurred_at"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "INCIDENT_CONFIRMED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "technical_incident"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "incident_id",
+              "confirmed_by",
+              "impact",
+              "decision"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "PERFORMANCE_RESUMED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "technical_incident"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "incident_id",
+              "candidate_id",
+              "resume_mode",
+              "timing_adjustment_seconds"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "RESULT_FINALIZED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "round_result"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "result_id",
+              "round",
+              "scope",
+              "standings",
+              "effective_judges_minimum",
+              "rule_set_version"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "TIE_DECLARED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "round_result"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "result_id",
+              "round",
+              "candidate_ids",
+              "tie_level",
+              "resolution"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "TIE_RERUN_HELD"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "round_result"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "result_id",
+              "round",
+              "candidate_ids",
+              "rerun_standings",
+              "witness"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "ADVANCEMENT_PUBLISHED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "round_result"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "result_id",
+              "round",
+              "direct",
+              "wildcards",
+              "quota",
+              "rule_set_version"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "EVIDENCE_LOCKED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "evidence_lock"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "lock_id",
+              "round",
+              "candidate_ids",
+              "manuscript_versions",
+              "on_site_event_ids",
+              "locked_by",
+              "expires_at"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "APPEAL_FILED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "appeal_case"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "appeal_id",
+              "candidate_id",
+              "round",
+              "grounds",
+              "filed_at",
+              "evidence_lock_id"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "APPEAL_REVIEWED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "appeal_case"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "appeal_id",
+              "reviewed_by",
+              "finding",
+              "decision",
+              "public_reason"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "TRAINING_FEEDBACK_RECORDED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "training_record"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "training_id",
+              "candidate_id",
+              "mentor_id",
+              "dimensions",
+              "summary"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "FINAL_DECISION_PUBLISHED"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "aggregate_type": {
+            "const": "final_decision"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "decision_id",
+              "edition_no",
+              "round",
+              "selected",
+              "public_reasons",
+              "evidence_round_by_candidate"
+            ],
+            "properties": {
+              "dimension_scores": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "payload"
+        ]
+      }
+    }
+  ]
 }

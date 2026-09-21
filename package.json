@@ -1,10 +1,12 @@
 {
   "name": "journalist-selection-review",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "领域事件基础校验",
+  "description": "记者选拔回避与复核：可复核的选拔运行系统（事件溯源）",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "gen-schema": "node scripts/gen-schema.js",
+    "scenario": "node scripts/run-scenario.js"
   }
 }

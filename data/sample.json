@@ -1,9 +1,17 @@
 {
-  "event_id": "092108-005-sample-001",
-  "event_type": "ENTRY_ACCEPTED",
+  "event_id": "entry_registered-c0001-v1",
+  "event_type": "ENTRY_REGISTERED",
   "aggregate_type": "candidate_entry",
-  "aggregate_id": "journalist_selection_review-001",
-  "occurred_at": "2026-09-20T18:00:00+08:00",
+  "aggregate_id": "C0001",
+  "occurred_at": "2026-09-10T08:00:00+08:00",
   "version": 1,
-  "summary": "登记记者选拔回避与复核的首条领域记录"
+  "actor": { "id": "SEC-01", "role": "secretariat" },
+  "payload": {
+    "candidate_id": "C0001",
+    "name": "记者0001",
+    "recommender": "REC-U03",
+    "recommendation_no": "13-0001",
+    "eligibility": { "unit_id": "U03", "press_card": "PC-C0001", "no_major_violation": true }
+  },
+  "summary": "登记报名：记者0001（推荐人 REC-U03，编号 13-0001）"
 }
