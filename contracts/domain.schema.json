@@ -19,20 +19,53 @@
     "event_type": {
       "type": "string",
       "enum": [
+        "EDITION_OPENED",
+        "RULES_FROZEN",
+        "JUDGE_REGISTERED",
+        "ENTRY_SUBMITTED",
         "ENTRY_ACCEPTED",
+        "ENTRY_REJECTED",
+        "GROUP_ASSIGNED",
+        "MANUSCRIPT_SUBMITTED",
+        "MANUSCRIPT_CHANGE_CONFIRMED",
+        "MANUSCRIPT_CHANGE_REJECTED",
+        "SESSION_SCHEDULED",
+        "DRAW_EXECUTED",
+        "ASSIGNMENT_CREATED",
+        "RELATIONSHIP_DECLARED",
+        "CONFLICT_FLAGGED",
+        "CONFLICT_CONFIRMED",
+        "CONFLICT_DISMISSED",
         "RECUSAL_DECLARED",
-        "SCORE_SUBMITTED",
+        "SUBSTITUTE_ASSIGNED",
+        "PERFORMANCE_STARTED",
+        "PERFORMANCE_COMPLETED",
+        "INTERRUPTION_REPORTED",
         "INCIDENT_CONFIRMED",
+        "SCORE_SUBMITTED",
+        "SCORE_CORRECTED",
+        "SCORE_ABSTAINED",
+        "SCORE_ABSENT_MARKED",
+        "ROUND_RESULTS_PUBLISHED",
+        "APPEAL_FILED",
+        "APPEAL_REVIEWED",
+        "ADVANCEMENT_DECIDED",
+        "CAMP_FEEDBACK_RECORDED",
         "DECISION_FINALIZED"
       ]
     },
     "aggregate_type": {
       "type": "string",
       "enum": [
+        "edition",
         "candidate_entry",
+        "session",
+        "performance_attempt",
         "judging_assignment",
+        "relationship_declaration",
         "score_sheet",
-        "appeal_case"
+        "appeal_case",
+        "round"
       ]
     },
     "aggregate_id": {
@@ -50,6 +83,9 @@
     "summary": {
       "type": "string",
       "minLength": 1
+    },
+    "payload": {
+      "type": "object"
     }
   },
   "additionalProperties": true
